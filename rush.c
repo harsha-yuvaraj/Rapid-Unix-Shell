@@ -147,7 +147,9 @@ int main(int argc, char *argv[]) {
        }
 
        free_tokens();
-       free(input);
+       
+       if(input != NULL)
+           free(input);
     }
 
 
