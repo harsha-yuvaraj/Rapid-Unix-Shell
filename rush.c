@@ -190,8 +190,7 @@ int main(int argc, char *argv[]) {
 
        for(int i = 0; i <= tokenCount; i++)
            if(pids[i] != -1)
-               wait(NULL);
-       
+               wait(NULL);   
 
        free_tokens();
 
