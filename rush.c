@@ -31,11 +31,11 @@ void flush_error(){
 }
 
 void free_tokens(){
-      for(int j=0; j<=tokenCount; j++)
-         for(int i=0; tokens[j][i] != NULL; i++)
+    for(int j=0; j<=tokenCount; j++)
+        for(int i=0; tokens[j][i] != NULL; i++)
             free(tokens[j][i]);
 
-      tokenCount = 0; 
+    tokenCount = 0; 
 }
 
 void print_parsed_input(){
@@ -47,6 +47,7 @@ void print_parsed_input(){
            
     }
 }
+
 void parse_input(char** input){
     char* token, *pos;
     int index = 0;
@@ -79,6 +80,35 @@ void parse_input(char** input){
     tokens[tokenCount][index] = NULL;
 }
 
+
+int execute_built_in(int tokenNumber){
+    if(strcmp(tokens[tokenNumber][0], "path") == 0){
+        for(int i = 0; i < pathCount; i++)
+            free(paths[i]);
+
+        pathCount = 0;
+
+        for(int i = 0; tokens[tokenNumber][i+1] != NULL; i++){
+            paths[i] = malloc(sizeof(char) * (strlen(tokens[tokenNumber][i+1]) + 1));
+            strcpy(paths[i], tokens[tokenNumber][i+1]);
+            pathCount++;
+        }   
+
+        for(int i = 0; i < pathCount; i++){
+            printf("Path %d: %s\n", i, paths[i]);
+        }
+    }
+    else if(strcmp(tokens[tokenNumber][0], "cd") == 0){
+
+    }
+    else if(strcmp(tokens[tokenNumber][0], "exit") == 0)
+        exit(0);
+    else
+     return 0;
+
+    return 1;
+}
+
 int main(int argc, char *argv[]) {
 
     if(argc > 1){
@@ -101,12 +131,16 @@ int main(int argc, char *argv[]) {
        }
        
        parse_input(&input);
-
-       print_parsed_input();
-       printf("tokenCount: %d\n", tokenCount);
-
        
-
+       for (int cmd = 0; cmd  <= tokenCount; cmd++){
+           if(execute_built_in(cmd))
+              continue;
+               
+           else{
+               //
+           }
+           
+       }
 
        free_tokens();
        free(input);
