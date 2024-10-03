@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/wait.h>
 
 #define MAX_PATHS 50
@@ -115,6 +116,36 @@ int execute_built_in(int tokenNumber){
     return 1;
 }
 
+int redirect_output(int cmd){
+
+    int redirect_found = -1, fd;
+
+    for(int i = 0; tokens[cmd][i] != NULL; i++){
+        if(strcmp(tokens[cmd][i], ">") == 0){
+            redirect_found = i;
+            break;
+        }
+    }
+    
+    if(redirect_found == -1)
+       return -2; // no redirect found
+
+    if(tokens[cmd][redirect_found+1] != NULL && tokens[cmd][redirect_found+2] == NULL && strcmp(tokens[cmd][redirect_found+1], ">") != 0){
+        fd = open(tokens[cmd][redirect_found+1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+        if(fd < 0 || dup2(fd, STDOUT_FILENO) < 0){
+            flush_error();
+            return -1; // redirect failed
+        }
+        else{
+            close(fd);
+            return redirect_found; // redirect success
+        }
+    }
+
+    return -1;  // redirect failed
+}
+
 void execute_cmd(int cmd){
     char* path;
 
@@ -131,10 +162,21 @@ void execute_cmd(int cmd){
         else
             free(path); 
     }
+    
+    if(path != NULL){
 
-    if(path != NULL && execv(path, tokens[cmd]) == -1)
+        int redirect = redirect_output(cmd);
+
+        if(redirect >= 0)
+            tokens[cmd][redirect] = NULL;
+        
+
+        if(redirect == -1 || execv(path, tokens[cmd]) == -1)
+            flush_error();
+    }
+    else
         flush_error();
-
+    
     exit(0);
 }
 
