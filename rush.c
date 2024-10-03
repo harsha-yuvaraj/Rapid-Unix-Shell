@@ -126,17 +126,14 @@ void execute_cmd(int cmd){
         strcat(path, "/");
         strcat(path,tokens[cmd][0]);
 
-        if(access(path, X_OK) == 0){
-            printf("Path exists:%s\n", path);
-            fflush(stdout);
+        if(access(path, X_OK) == 0)
             break;
-        }
-        else{
-            printf("Path does not exist:%s\n", path);
-            fflush(stdout);
-            free(path);
-        }
+        else
+            free(path); 
     }
+
+    if(path != NULL && execv(path, tokens[cmd]) == -1)
+        flush_error();
 
     exit(0);
 }
