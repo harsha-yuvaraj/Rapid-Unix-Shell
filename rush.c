@@ -102,8 +102,12 @@ int execute_built_in(int tokenNumber){
         else if(chdir(tokens[tokenNumber][1]) != 0)
             flush_error();
     }
-    else if(strcmp(tokens[tokenNumber][0], "exit") == 0)
-        exit(0);
+    else if(strcmp(tokens[tokenNumber][0], "exit") == 0){
+        if(tokens[tokenNumber][1] != NULL)
+            flush_error();
+        else
+            exit(0);
+    }
     else
         return 0;
 
