@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #define MAX_PATHS 50
 #define BASE_SHELL_PATH "/bin"
@@ -114,6 +115,32 @@ int execute_built_in(int tokenNumber){
     return 1;
 }
 
+void execute_cmd(int cmd){
+    char* path;
+
+    for(int i = 0; i < pathCount; i++){
+        int path_len = strlen(paths[i]) + strlen(tokens[cmd][0]) + 1;
+        path = malloc(sizeof(char) * (path_len));
+        memset(path, '\0', path_len);
+        strcpy(path, paths[i]);
+        strcat(path, "/");
+        strcat(path,tokens[cmd][0]);
+
+        if(access(path, X_OK) == 0){
+            printf("Path exists:%s\n", path);
+            fflush(stdout);
+            break;
+        }
+        else{
+            printf("Path does not exist:%s\n", path);
+            fflush(stdout);
+            free(path);
+        }
+    }
+
+    exit(0);
+}
+
 int main(int argc, char *argv[]) {
 
     if(argc > 1){
@@ -126,6 +153,7 @@ int main(int argc, char *argv[]) {
     while(1){
        char* input = NULL; 
        size_t no_buffer = 0;
+       pid_t pids[tokenCount+1];
 
        prompt();
        
@@ -138,20 +166,39 @@ int main(int argc, char *argv[]) {
        parse_input(&input);
        
        for (int cmd = 0; cmd  <= tokenCount; cmd++){
-           if(execute_built_in(cmd))
-              continue;
-               
+           if(tokens[cmd][0] == NULL){
+               pids[cmd] = -1;
+               continue;
+           }
+              
+           else if(execute_built_in(cmd))
+               continue;
+
+            else if(pathCount == 0){
+                flush_error();
+                pids[cmd] = -1; 
+                continue;
+            }
+
            else{
-               //
+               pids[cmd] = fork();
+
+               if(pids[cmd] == -1)
+                   flush_error();
+
+               if(pids[cmd] == 0)
+                   execute_cmd(cmd);
            }
        }
 
-       free_tokens();
+       for(int i = 0; i <= tokenCount; i++)
+           if(pids[i] != -1)
+               wait(NULL);
        
+
+       free_tokens();
+
        if(input != NULL)
            free(input);
     }
-
-
-   
 }
