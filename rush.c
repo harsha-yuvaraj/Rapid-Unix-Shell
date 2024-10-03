@@ -93,18 +93,19 @@ int execute_built_in(int tokenNumber){
             strcpy(paths[i], tokens[tokenNumber][i+1]);
             pathCount++;
         }   
-
-        for(int i = 0; i < pathCount; i++){
-            printf("Path %d: %s\n", i, paths[i]);
-        }
     }
     else if(strcmp(tokens[tokenNumber][0], "cd") == 0){
 
+        if(tokens[tokenNumber][1] == NULL || tokens[tokenNumber][2] != NULL)
+            flush_error();
+    
+        else if(chdir(tokens[tokenNumber][1]) != 0)
+            flush_error();
     }
     else if(strcmp(tokens[tokenNumber][0], "exit") == 0)
         exit(0);
     else
-     return 0;
+        return 0;
 
     return 1;
 }
@@ -139,7 +140,6 @@ int main(int argc, char *argv[]) {
            else{
                //
            }
-           
        }
 
        free_tokens();
