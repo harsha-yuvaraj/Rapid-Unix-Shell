@@ -31,3 +31,19 @@ Once compiled, start the shell by running:
 ./rush
 ```
 The shell will prompt with rush>, ready to accept commands. You can execute standard Unix commands, run multiple commands in parallel, or redirect output to files.
+
+### Examples
+Here are some examples of how to use the shell:
+
+**Single Command**: Run a simple command like ls to list directory contents:
+```
+rush> ls -l
+```
+**Output Redirection**: Redirect the output of a command to a file using the `>` operator:
+```
+rush> ls -l > output.txt
+```
+**Parallel Commands**: Run multiple commands in parallel by using the `&` operator:
+```
+rush> mkdir newdir & grep "text" file.txt & ls -l > output.txt
+```
