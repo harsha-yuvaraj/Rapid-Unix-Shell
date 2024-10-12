@@ -12,6 +12,7 @@ The **Rapid Unix Shell** is a custom Unix-based shell developed in C, designed t
   - `path`: Manage executable search paths.
   - `exit`: Exit the shell.
 - **Robust Error Handling**: Includes mechanisms for handling incorrect commands and system call failures.
+- **Flexible Input Parsing**: Programmed to handle multiple spaces or tabs between commands and arguments, empty commands between parallel operators (&), and mixed use of spaces and tabs for formatting.
 
 ## Getting Started
 
@@ -47,3 +48,13 @@ rush> ls -l > output.txt
 ```
 rush> mkdir newdir & grep "text" file.txt & ls -l > output.txt
 ```
+
+## Error Handling
+The shell includes robust error handling for situations such as invalid commands, incorrect use of redirection, failed command execution, and more. For example: 
+
+**Invalid Directory in cd**: If an invalid directory is provided to the cd command, an error will be displayed.
+```
+rush> cd nonexistentdir
+An error has occurred
+```
+
