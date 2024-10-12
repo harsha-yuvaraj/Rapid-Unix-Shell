@@ -23,10 +23,11 @@ The **Rapid Unix Shell** is a custom Unix-based shell developed in C, designed t
 To compile the project, use the provided `Makefile`. Simply run:
 ```bash
 make
+```
 
 ### Running the Shell
 Once compiled, start the shell by running:
 ```bash
 ./rush
-
+```
 The shell will prompt with rush>, ready to accept commands. You can execute standard Unix commands, run multiple commands in parallel, or redirect output to files.
