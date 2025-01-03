@@ -1,7 +1,7 @@
 # Rapid Unix Shell
 
 ## Project Overview
-The **Rapid Unix Shell** is a custom Unix-based shell developed in C, designed to execute standard Unix commands like `ls`, `grep`, `mkdir`, and `awk`. It supports parallel command execution, output redirection, and robust error handling. The shell also provides built-in commands like `cd`, `path`, and `exit` for convenient navigation and process control.
+A custom Unix-based shell developed in C, designed to execute standard Unix commands like `ls`, `grep`, `mkdir`, and `awk`. It supports parallel command execution, output redirection, and robust error handling. The shell also provides built-in commands like `cd`, `path`, and `exit` for convenient navigation and process control.
 
 ## Features
 - **Command Execution**: Supports Unix commands such as `cat`, `grep`, `touch`, `mkdir`, and more.
